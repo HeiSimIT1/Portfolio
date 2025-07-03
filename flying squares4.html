@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Boxes with box5 as container</title>
+  <style>
+    :root {
+      /* Background colors */
+      --dark-navy: rgb(10, 25, 50);
+      --bright-lime: rgb(180, 255, 0);
+      --dark-green: rgb(0, 60, 0);
+      --bright-yellow: rgb(255, 255, 0);
+      --deep-red: rgb(150, 0, 0);
+      --dark-teal: rgb(0, 70, 70);
+      --light-magenta: rgb(219, 128, 197);
+      --bright-orange: rgb(255, 140, 0);
+      --very-dark-purple: rgb(50, 0, 75);
+      --sky-blue: rgb(135, 206, 235);
+
+      /* rotation and translation variables */
+      --rotation-out: 360deg;
+      --transX: 180px;
+      --transY: 180px;
+    }
+
+    /* Colors for boxes */
+    
+
+    .box1 {
+      background-color: var(--dark-navy);
+      /* background: linear-gradient(to bottom, var(--dark-navy), white);*/
+      color: var(--bright-orange);
+    }
+
+    /* swapped backgrounds of box2 and box8 */
+    .box2 {
+      background-color: var(--bright-orange);
+      color: var(--dark-green);
+    }
+
+    .box3 {
+      background-color: var(--dark-green);
+      color: var(--bright-yellow);
+    }
+
+    .box4 {
+      background-color: var(--bright-yellow);
+      color: var(--deep-red);
+    }
+.box5 {
+      background-color: var(--deep-red);
+      color: var(--light-magenta);
+      
+    }
+
+
+
+
+    
+
+    /* swapped box6 and box7 colors */
+    .box6 {
+      background-color: var(--light-magenta);
+      color: var(--dark-teal);
+    }
+
+    .box7 {
+      background-color: var(--dark-teal);
+      color: var(--bright-lime);
+    }
+
+    .box8 {
+      background-color: var(--bright-lime);
+      color: var(--very-dark-purple);
+    }
+
+    .box9 {
+      background-color: var(--very-dark-purple);
+      color: var(--bright-lime);
+    }
+
+    /* Box styling */
+    .box5 {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 150px;
+      height: 150px;
+      border: 5px solid black;
+      border-radius: 25px;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transform: translate(-50%, -50%);
+      transition: 1s;
+    }
+
+    .box1, .box2, .box3, .box4, .box6, .box7, .box8, .box9 {
+      width: 150px;
+      height: 150px;
+      border: 5px inset slateblue;
+      border-radius: 25px;
+      position: absolute;
+      transition: 2s;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    /* Hover transformations */
+    .box5:hover .box1 {
+      transform: rotate(var(--rotation-out)) translateX(calc(-1 * var(--transX))) translateY(calc(-1 * var(--transY)));
+    }
+    .box5:hover .box2 {
+      transform: rotate(var(--rotation-out)) translateX(calc(0 * var(--transX))) translateY(calc(-1 * var(--transY)));
+    }
+    .box5:hover .box3 {
+      transform: rotate(var(--rotation-out)) translateX(calc(1 * var(--transX))) translateY(calc(-1 * var(--transY)));
+    }
+    .box5:hover .box4 {
+      transform: rotate(var(--rotation-out)) translateX(calc(-1 * var(--transX))) translateY(calc(0 * var(--transY)));
+    }
+    .box5:hover .box6 {
+      transform: rotate(var(--rotation-out)) translateX(calc(1 * var(--transX))) translateY(calc(0 * var(--transY)));
+    }
+    .box5:hover .box7 {
+      transform: rotate(var(--rotation-out)) translateX(calc(-1 * var(--transX))) translateY(calc(1 * var(--transY)));
+    }
+    .box5:hover .box8 {
+      transform: rotate(var(--rotation-out)) translateX(calc(0 * var(--transX))) translateY(calc(1 * var(--transY)));
+    }
+    .box5:hover .box9 {
+      transform: rotate(var(--rotation-out)) translateX(calc(1 * var(--transX))) translateY(calc(1 * var(--transY)));
+    }
+  </style>
+</head>
+<body>
+  <div class="box5">
+    Box 5 (container)
+    <div class="box1">Box 1</div>
+    <div class="box2">Box 2</div>
+    <div class="box3">Box 3</div>
+    <div class="box4">Box 4</div>
+    <div class="box6">Box 6</div>
+    <div class="box7">Box 7</div>
+    <div class="box8">Box 8</div>
+    <div class="box9">Box 9</div>
+  </div>
+  caption
+</body>
+</html>

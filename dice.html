@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3D Dice Cube</title>
+  <style>
+    body {
+      background: #222;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      perspective: 800px;
+    }
+
+    .scene {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      perspective: 1000px;
+    }
+
+    .cube {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      animation: rotate 10s infinite linear;
+      
+    }
+
+    .face {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: white;
+      border: 2px solid black;
+      font-size: 3em;
+      font-weight: bold;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      
+    }
+
+    .front  { transform: translateZ(100px); }
+    .back   { transform: rotateY(180deg) translateZ(100px); }
+    .right  { transform: rotateY(90deg) translateZ(100px); }
+    .left   { transform: rotateY(-90deg) translateZ(100px); }
+    .top    { transform: rotateX(90deg) translateZ(100px); }
+    .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+    @keyframes rotate {
+      0%   { transform: rotateX(0deg) rotateY(0deg); }
+      100% { transform: rotateX(360deg) rotateY(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="scene">
+    <div class="cube">
+      <div class="face front">Clean Code</div>
+      <div class="face front"  data-face="front">Clarity</div>
+      <div class="face back"   data-face="back">Simplicity</div>
+      <div class="face right"  data-face="right">Testing</div>
+      <div class="face left"   data-face="left">Modu- larity</div>
+      <div class="face top"    data-face="top">Consis- tency</div>
+      <div class="face bottom" data-face="bottom">Refactor</div>
+    </div>
+  </div>
+</body>
+</html>

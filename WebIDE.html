@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Live Code Editor</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: sans-serif;
+      margin: 0;
+      padding: 1em;
+      background-color: #f9f9f9;
+    }
+
+    .controls {
+      margin-bottom: 1em;
+    }
+
+    .editor-container {
+      display: flex;
+      flex-direction: row;
+      gap: 1em;
+    }
+
+    .editor-container.vertical {
+      flex-direction: column;
+    }
+
+    .editor-block {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .editor-block label {
+      font-weight: bold;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .editor {
+      flex: 1;
+      display: flex;
+      height: 200px;
+      border: 1px solid #ccc;
+      overflow: hidden;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.4;
+      background-color: white;
+    }
+
+    .line-numbers {
+      width: 40px;
+      padding: 0;
+      margin: 0;
+      border-right: 1px solid #ccc;
+      background: #f0f0f0;
+      color: #888;
+      text-align: right;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.4;
+      padding-top: 5px;
+      overflow: hidden;
+      white-space: pre;
+    }
+
+    textarea {
+      flex: 1;
+      border: none;
+      padding: 5px;
+      margin: 0;
+      resize: none;
+      font-family: monospace;
+      font-size: 14px;
+      line-height: 1.4;
+      outline: none;
+      overflow: auto;
+    }
+
+    iframe {
+      width: 100%;
+      height: 600px;
+      border: 1px solid #ccc;
+      margin-top: 1em;
+      background-color: white;
+    }
+
+    button {
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="controls">
+    <button onclick="toggleLayout()">Toggle Layout</button>
+    <button onclick="saveCode()">Save Code</button>
+    <input type="file" id="fileInput" accept=".html" style="display:none" />
+<button onclick="document.getElementById('fileInput').click()">Load Code</button>
+  </div>
+
+  <div id="editors" class="editor-container">
+    <!-- HTML Editor -->
+    <div class="editor-block">
+      <label for="html-code">HTML</label>
+      <div class="editor">
+        <pre class="line-numbers" id="html-lines">1</pre>
+        <textarea id="html-code" oninput="updatePreview(); updateLineNumbers(this, 'html-lines')">
+<h1>Hello World</h1>
+        </textarea>
+      </div>
+    </div>
+    
+
+    <!-- CSS Editor -->
+    <div class="editor-block">
+      <label for="css-code">CSS</label>
+      <div class="editor">
+        <pre class="line-numbers" id="css-lines">1</pre>
+        <textarea id="css-code" oninput="updatePreview(); updateLineNumbers(this, 'css-lines')">
+h1 { color: blue; }
+        </textarea>
+      </div>
+    </div>
+
+    <!-- JS Editor -->
+    <div class="editor-block">
+      <label for="js-code">JavaScript</label>
+      <div class="editor">
+        <pre class="line-numbers" id="js-lines">1</pre>
+        <textarea id="js-code" oninput="updatePreview(); updateLineNumbers(this, 'js-lines')">
+console.log("JS Loaded");
+        </textarea>
+      </div>
+    </div>
+  </div>
+
+  <iframe id="preview"></iframe>
+
+  <script>
+    const htmlInput = document.getElementById("html-code");
+    const cssInput = document.getElementById("css-code");
+    const jsInput = document.getElementById("js-code");
+    const previewFrame = document.getElementById("preview");
+
+    function updatePreview() {
+      const html = htmlInput.value;
+      const css = `<style>${cssInput.value}</style>`;
+      const js = `<script>${jsInput.value}<\/script>`;
+      const output = `${html}\n${css}\n${js}`;
+      const doc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+      doc.open();
+      doc.write(output);
+      doc.close();
+    }
+
+    function updateLineNumbers(textarea, lineId) {
+      const lines = textarea.value.split("\n").length;
+      const lineNumberElement = document.getElementById(lineId);
+      lineNumberElement.textContent = Array.from({ length: lines }, (_, i) => i + 1).join("\n");
+    }
+
+    // Scroll sync
+    ["html-code", "css-code", "js-code"].forEach(id => {
+      const textarea = document.getElementById(id);
+      const lineBox = document.getElementById(id.replace("-code", "-lines"));
+      textarea.addEventListener("scroll", () => {
+        lineBox.scrollTop = textarea.scrollTop;
+      });
+    });
+
+    function toggleLayout() {
+      document.getElementById("editors").classList.toggle("vertical");
+    }
+
+    // Init
+    updatePreview();
+    updateLineNumbers(htmlInput, "html-lines");
+    updateLineNumbers(cssInput, "css-lines");
+    updateLineNumbers(jsInput, "js-lines");
+
+
+    function saveCode() {
+  const htmlContent = htmlInput.value;
+  const cssContent = `<style>\n${cssInput.value}\n</style>`;
+  const jsContent = `<script>\n${jsInput.value.replace(/<\/script>/gi, '<\\/script>')}\n<\/script>`;
+
+  const fullContent = `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>My Saved Code</title>
+  ${cssContent}
+</head>
+<body>
+  ${htmlContent}
+  ${jsContent}
+</body>
+</html>`;
+
+  const blob = new Blob([fullContent], { type: "text/html" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "my-code.html";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+
+
+
+document.getElementById("fileInput").addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const contents = e.target.result;
+
+    // Extract contents from full HTML
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(contents, "text/html");
+
+    const html = doc.body.innerHTML.trim();
+    const css = Array.from(doc.getElementsByTagName("style")).map(s => s.innerHTML).join("\n");
+    const js = Array.from(doc.getElementsByTagName("script")).map(s => s.innerHTML).join("\n");
+
+    htmlInput.value = html;
+    cssInput.value = css;
+    jsInput.value = js;
+
+    updateLineNumbers(htmlInput, "html-lines");
+    updateLineNumbers(cssInput, "css-lines");
+    updateLineNumbers(jsInput, "js-lines");
+    updatePreview();
+  };
+
+  reader.readAsText(file);
+});
+
+  </script>
+</body>
+</html>
